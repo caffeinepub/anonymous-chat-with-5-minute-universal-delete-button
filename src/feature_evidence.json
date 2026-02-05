@@ -1,0 +1,89 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-build-a-frontend-chat-ui-that-lets-users-send-messages-and-view-a-shared-message-feed-anonymously-no-usernames-no-identity-display-using-react-query-to-load-and-refresh-the-feed",
+      "featureTitle": "Build a frontend chat UI that lets users send messages and view a shared message feed anonymously (no usernames, no identity display), using React Query to load and refresh the feed.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/chat/backendClient.ts",
+        "frontend/src/chat/components/MessageComposer.tsx",
+        "frontend/src/chat/components/MessageFeed.tsx",
+        "frontend/src/chat/queries.ts",
+        "frontend/src/main.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-per-message-delete-control-in-the-frontend-that-is-hidden-or-disabled-until-5-minutes-after-the-message-creation-time-then-becomes-available-and-allows-any-user-to-delete-the-message-reflect-deletion-in-the-ui",
+      "featureTitle": "Add a per-message delete control in the frontend that is hidden or disabled until 5 minutes after the message creation time, then becomes available and allows any user to delete the message; reflect deletion in the UI.",
+      "files": [
+        "frontend/src/chat/backendClient.ts",
+        "frontend/src/chat/components/MessageFeed.tsx",
+        "frontend/src/chat/components/MessageItem.tsx",
+        "frontend/src/chat/queries.ts",
+        "frontend/src/chat/time.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-distinctive-visual-theme-across-the-app-colors-typography-spacing-and-component-styling-suitable-for-an-anonymous-chat-product-avoiding-blue-purple-as-the-primary-palette",
+      "featureTitle": "Apply a coherent, distinctive visual theme across the app (colors, typography, spacing, and component styling) suitable for an anonymous chat product, avoiding blue/purple as the primary palette.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-generated-static-image-assets-for-the-app-and-render-them-in-the-frontend-from-frontend-public-assets-generated-to-support-the-chosen-visual-theme",
+      "featureTitle": "Add generated static image assets for the app and render them in the frontend (from frontend/public/assets/generated) to support the chosen visual theme.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/chat/components/MessageFeed.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

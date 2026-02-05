@@ -1,0 +1,114 @@
+{
+  "kind": "build_request",
+  "title": "Anonymous chat with 5-minute universal delete button",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement backend message storage and APIs for an anonymous chat: allow creating a message (text content), listing recent messages, and deleting a message after it has been at least 5 minutes old; deletion must be allowed by any caller and must be enforced by the backend time check.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "i want to create an app that allows you to chat with other humans on the app anonymously and after 5 minutes a delete button appears allowing anyone to delete the message"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A message creation endpoint exists that accepts message text and persists the message with a creation timestamp.",
+        "A message listing endpoint exists that returns messages needed to render the chat feed (including message id, text, created timestamp, and whether it is deleted).",
+        "A message delete endpoint exists that deletes a message only if (now - createdAt) >= 5 minutes.",
+        "If delete is attempted before 5 minutes have passed, the backend rejects the request with a clear error.",
+        "Any caller can delete any eligible message (no ownership checks)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Build a frontend chat UI that lets users send messages and view a shared message feed anonymously (no usernames, no identity display), using React Query to load and refresh the feed.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "allows you to chat with other humans on the app anonymously"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The app shows a message feed and a compose box to submit a new message.",
+        "Messages display without any author name or principal-derived identity.",
+        "New messages appear in the feed after sending (via query invalidation or refresh).",
+        "The feed refreshes periodically (polling) so users can see new messages without manual reload."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a per-message delete control in the frontend that is hidden or disabled until 5 minutes after the message creation time, then becomes available and allows any user to delete the message; reflect deletion in the UI.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "after 5 minutes a delete button appears allowing anyone to delete the message"
+        ]
+      },
+      "acceptanceCriteria": [
+        "For each message, the UI does not show an active delete button until the message age is at least 5 minutes.",
+        "After 5 minutes, the UI shows an enabled delete button for that message.",
+        "Clicking delete removes the message from the feed or replaces it with a clear deleted state (e.g., 'Message deleted').",
+        "If the user attempts deletion before 5 minutes (e.g., due to clock differences), the UI shows an English error message and keeps the message intact.",
+        "Backend enforcement prevents early deletion even if the frontend is manipulated."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Apply a coherent, distinctive visual theme across the app (colors, typography, spacing, and component styling) suitable for an anonymous chat product, avoiding blue/purple as the primary palette.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The chat page has consistent typography and spacing, and a clearly defined layout (header, feed area, composer).",
+        "The primary UI palette is not blue/purple-dominant.",
+        "Buttons, inputs, and message bubbles look visually consistent across the app."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add generated static image assets for the app and render them in the frontend (from frontend/public/assets/generated) to support the chosen visual theme.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The generated images are added under frontend/public/assets/generated.",
+        "At least one generated image is visibly used in the UI (e.g., header/empty-state).",
+        "No image assets are served through or fetched from the backend."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo.",
+    "Do not edit any files under frontend/src/components/ui or any frontend immutablePaths listed in SYSTEM_CONTEXT.",
+    "Use polling (React Query refetch) for feed updates; do not implement WebSockets or real-time sockets."
+  ],
+  "nonGoals": [
+    "User accounts, usernames, profile pages, or any non-anonymous identity system.",
+    "Private 1:1 rooms, group management, invites, or moderation tooling beyond the timed delete behavior.",
+    "End-to-end encryption guarantees or external key management.",
+    "Typing indicators, read receipts, or push notifications."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Anonymous chat header illustration with abstract speech bubbles and subtle grain texture, warm neutral palette (anon-chat-header.dim_1600x400.png)",
+      "Empty-state illustration showing a minimal chat bubble icon in the same style (empty-chat-state.dim_512x512.png)"
+    ],
+    "edits": []
+  }
+}

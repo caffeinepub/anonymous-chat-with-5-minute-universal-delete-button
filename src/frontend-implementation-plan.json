@@ -1,0 +1,144 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Anonymous chat frontend with timed universal delete UI",
+  "requirements": [
+    {
+      "id": "REQ-2",
+      "summary": "Create an anonymous chat UI with a shared message feed and composer, using React Query polling to load and refresh messages.",
+      "acceptanceCriteria": [
+        "The app shows a message feed and a compose box to submit a new message.",
+        "Messages display without any author name or principal-derived identity.",
+        "New messages appear in the feed after sending (via query invalidation or refresh).",
+        "The feed refreshes periodically (polling) so users can see new messages without manual reload."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the main app shell and render a single chat screen (header, feed, composer) without any identity display; wire in React Query-powered chat components."
+        },
+        {
+          "path": "frontend/src/chat/backendClient.ts",
+          "operation": "create",
+          "description": "Add a typed backend client wrapper for sendMessage and listMessages that uses the project’s core infrastructure for canister connectivity. Use the core-infrastructure component to support backend connection configuration and actor access; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/chat/queries.ts",
+          "operation": "create",
+          "description": "Define React Query keys and hooks for listing messages with polling refetch, plus a send-message mutation that invalidates the feed query."
+        },
+        {
+          "path": "frontend/src/chat/components/MessageComposer.tsx",
+          "operation": "create",
+          "description": "Implement a composer UI (textarea/input + send button) that submits anonymous messages via the send mutation and clears the input on success."
+        },
+        {
+          "path": "frontend/src/chat/components/MessageFeed.tsx",
+          "operation": "create",
+          "description": "Implement the feed UI that renders recent messages from the list query, supports loading/empty states, and stays anonymous (no usernames/identity)."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure the app renders the new App component and keeps React Query provider wiring intact; do not add any login UI or identity-dependent rendering."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a per-message delete control that only becomes active after 5 minutes and updates the UI after deletion or shows an English error on early delete attempts.",
+      "acceptanceCriteria": [
+        "For each message, the UI does not show an active delete button until the message age is at least 5 minutes.",
+        "After 5 minutes, the UI shows an enabled delete button for that message.",
+        "Clicking delete removes the message from the feed or replaces it with a clear deleted state (e.g., 'Message deleted').",
+        "If the user attempts deletion before 5 minutes (e.g., due to clock differences), the UI shows an English error message and keeps the message intact.",
+        "Backend enforcement prevents early deletion even if the frontend is manipulated."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/chat/time.ts",
+          "operation": "create",
+          "description": "Add utilities for converting backend nanosecond timestamps (bigint) to client time and computing message age and 5-minute eligibility."
+        },
+        {
+          "path": "frontend/src/chat/queries.ts",
+          "operation": "modify",
+          "description": "Add a delete-message React Query mutation that calls deleteMessage, invalidates the message list on success, and surfaces backend errors for display."
+        },
+        {
+          "path": "frontend/src/chat/components/MessageItem.tsx",
+          "operation": "create",
+          "description": "Render a single message bubble with a delete control that is hidden/disabled until (now - timestamp) >= 5 minutes; on delete, update UI to remove the message or show a 'Message deleted' state."
+        },
+        {
+          "path": "frontend/src/chat/components/MessageFeed.tsx",
+          "operation": "modify",
+          "description": "Use MessageItem for each message and display any deletion error as an English message without breaking the feed rendering."
+        },
+        {
+          "path": "frontend/src/chat/backendClient.ts",
+          "operation": "modify",
+          "description": "Add deleteMessage support in the backend client wrapper and ensure errors are propagated for UI handling. Use the core-infrastructure component to support backend connection configuration and actor access; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Apply a cohesive, distinctive anonymous-chat visual theme with consistent layout/typography/spacing and a primary palette that is not blue/purple-dominant.",
+      "acceptanceCriteria": [
+        "The chat page has consistent typography and spacing, and a clearly defined layout (header, feed area, composer).",
+        "The primary UI palette is not blue/purple-dominant.",
+        "Buttons, inputs, and message bubbles look visually consistent across the app."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Add global styling and theme tokens (CSS variables used by Tailwind config) with a warm-neutral primary palette (not blue/purple) and consistent typography/spacing defaults."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Tune theme extensions (if needed) to support the chosen warm-neutral palette and consistent component styling via existing CSS variable-based color tokens."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Apply the themed layout structure (header, feed region, composer region) and consistent spacing/typography classes across the chat UI."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add the required generated static images under frontend/public/assets/generated and render them in the UI (header and empty state) without fetching images from the backend.",
+      "acceptanceCriteria": [
+        "The generated images are added under frontend/public/assets/generated.",
+        "At least one generated image is visibly used in the UI (e.g., header/empty-state).",
+        "No image assets are served through or fetched from the backend."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/anon-chat-header.dim_1600x400.png",
+          "operation": "create",
+          "description": "Add the generated static header illustration asset at frontend/public/assets/generated/anon-chat-header.dim_1600x400.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/empty-chat-state.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static empty-state illustration asset at frontend/public/assets/generated/empty-chat-state.dim_512x512.png."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Render frontend/public/assets/generated/anon-chat-header.dim_1600x400.png in the header area to support the visual theme."
+        },
+        {
+          "path": "frontend/src/chat/components/MessageFeed.tsx",
+          "operation": "modify",
+          "description": "Render frontend/public/assets/generated/empty-chat-state.dim_512x512.png in the feed empty state when there are no messages; ensure it is used as a static frontend asset."
+        }
+      ]
+    }
+  ]
+}

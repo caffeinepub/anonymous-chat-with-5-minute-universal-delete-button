@@ -1,0 +1,71 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-05T02:21:36.678Z",
+  "summary": "Core anonymous chat functionality was added: Motoko backend can send/list/delete with a 5-minute time gate, and the React frontend shows a feed + composer with React Query polling and a per-message delete button that appears after 5 minutes. However, the backend does not expose a \"deleted\" state in message listings (it removes messages entirely), the required generated image assets themselves are not present in the diff, and some unrequested features (Internet Identity auth scaffolding and backend trimming API) were introduced.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Message listing endpoint must return messages needed to render the chat feed including message id, text, created timestamp, and whether it is deleted.",
+      "reason": "The backend Message type contains only id/content/timestamp and deleteMessage removes the message from storage; there is no persisted or returned \"deleted\" flag/state.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Add generated static image assets under frontend/public/assets/generated (anon-chat-header.dim_1600x400.png and empty-chat-state.dim_512x512.png).",
+      "reason": "Frontend references these image paths, but no files under frontend/public/assets/generated are shown as added in the diff summary.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend/src/chat/components/MessageFeed.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Internet Identity authentication/provider and identity-aware actor creation (login/logout, stored identity handling).",
+      "reason": "BuildRequest explicitly lists user accounts/identity systems as non-goals; the diff adds Internet Identity provider/hook and uses identity principals to key the actor query.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts",
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/main.tsx"
+      ]
+    },
+    {
+      "description": "Backend message trimming/cleanup API (trimMessages) to clear old messages and enforce size limits.",
+      "reason": "Not requested in any requirement; extra maintenance endpoint added beyond send/list/delete.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "UI footer promotional link/content (© 2026, caffeine.ai link).",
+      "reason": "Not requested by requirements; additional UI content added.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/chat/backendClient.ts",
+    "frontend/src/chat/components/MessageComposer.tsx",
+    "frontend/src/chat/components/MessageFeed.tsx",
+    "frontend/src/chat/components/MessageItem.tsx",
+    "frontend/src/chat/queries.ts",
+    "frontend/src/chat/time.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

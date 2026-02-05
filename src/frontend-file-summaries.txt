@@ -1,0 +1,11 @@
+{
+  "frontend/src/App.tsx": "Main application component that renders the anonymous chat interface with header (including generated image), message feed, composer, and footer.",
+  "frontend/src/chat/backendClient.ts": "Backend client wrapper that provides typed methods for sending, listing, and deleting messages using the actor from useActor hook.",
+  "frontend/src/chat/queries.ts": "React Query hooks for managing message data with polling, send mutation, and delete mutation with automatic cache invalidation.",
+  "frontend/src/chat/time.ts": "Utility functions for converting backend nanosecond timestamps to JavaScript dates, calculating message age, and determining deletability status.",
+  "frontend/src/chat/components/MessageComposer.tsx": "Message input component with textarea, character counter (150 max), and send button with loading states and error handling.",
+  "frontend/src/chat/components/MessageFeed.tsx": "Message list component that displays all messages with loading/empty/error states and renders the empty-state generated image when no messages exist.",
+  "frontend/src/chat/components/MessageItem.tsx": "Individual message display component with real-time countdown timer and delete button that appears after 5 minutes with confirmation dialog.",
+  "frontend/src/index.css": "Global styles with warm neutral OKLCH color palette (avoiding blue/purple) for both light and dark modes.",
+  "frontend/src/main.tsx": "Application entry point with QueryClient, InternetIdentityProvider, ThemeProvider, and Sonner toast notifications."
+}

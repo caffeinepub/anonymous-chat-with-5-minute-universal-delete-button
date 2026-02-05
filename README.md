@@ -1,2 +1,3 @@
-# anonymous-chat-with-5-minute-universal-delete-button
-Exported from Caffeine project: Anonymous chat with 5-minute universal delete button
+## Anonymous chat with 5-minute universal delete button
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`
